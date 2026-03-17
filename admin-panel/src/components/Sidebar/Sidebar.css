@@ -1,0 +1,44 @@
+.sidebar {
+  position: fixed;        /* Sticky sidebar */
+  top: 0;
+  left: 0;
+  height: 100vh;          /* Full height */
+  width: 220px;           /* Fixed width */
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 20px;
+  overflow-y: auto;       /* Scroll if content exceeds height */
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 8px 0;
+}
+
+.sidebar ul li a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.sidebar ul li a:hover {
+  background-color: #34495e;
+}
+
+/* Active link highlight */
+.sidebar ul li a.active {
+  background-color: #1abc9c;
+  font-weight: bold;
+}

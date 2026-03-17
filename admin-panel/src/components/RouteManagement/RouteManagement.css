@@ -1,0 +1,102 @@
+.route-management {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.route-management h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Add Route & Stop */
+.add-route, .add-stop {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-route input, .add-stop input, .add-stop select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-route button, .add-stop button {
+  padding: 8px 12px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-route button:hover, .add-stop button:hover {
+  background-color: #219150;
+}
+
+/* Route List */
+.route-list {
+  list-style: none;
+  padding: 0;
+}
+
+.route-list li {
+  background-color: #fff;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.route-header button {
+  background-color: #c0392b;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.route-header button:hover {
+  background-color: #a93226;
+}
+
+/* Stop List */
+.stop-list {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.stop-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.stop-list button {
+  background-color: #e67e22;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.stop-list button:hover {
+  background-color: #d35400;
+}

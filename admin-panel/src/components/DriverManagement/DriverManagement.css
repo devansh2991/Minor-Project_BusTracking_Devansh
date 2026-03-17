@@ -1,0 +1,89 @@
+.driver-management {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.driver-management h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Add Driver */
+.add-driver {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-driver input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-driver button {
+  padding: 8px 12px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-driver button:hover {
+  background-color: #219150;
+}
+
+/* Driver List */
+.driver-list {
+  list-style: none;
+  padding: 0;
+}
+
+.driver-list li {
+  background-color: #fff;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.driver-list li.unavailable span {
+  color: red;
+}
+
+.driver-list button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.driver-list button:first-of-type {
+  background-color: #e67e22;
+  color: #fff;
+}
+
+.driver-list button:first-of-type:hover {
+  background-color: #d35400;
+}
+
+.driver-list button:last-of-type {
+  background-color: #c0392b;
+  color: #fff;
+}
+
+.driver-list button:last-of-type:hover {
+  background-color: #a93226;
+}

@@ -1,0 +1,108 @@
+.student-management {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.student-management h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Add Student Form */
+.add-student {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.add-student input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-student label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.add-student button {
+  padding: 8px 12px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-student button:hover {
+  background-color: #219150;
+}
+
+/* Student List */
+.student-list {
+  list-style: none;
+  padding: 0;
+}
+
+.student-list li {
+  background-color: #fff;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-info .address {
+  font-size: 14px;
+  color: #777;
+}
+
+.student-actions button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.student-actions button:first-of-type {
+  background-color: #e67e22;
+  color: #fff;
+}
+
+.student-actions button:first-of-type:hover {
+  background-color: #d35400;
+}
+
+.student-actions button:last-of-type {
+  background-color: #c0392b;
+  color: #fff;
+}
+
+.student-actions button:last-of-type:hover {
+  background-color: #a93226;
+}
+
+/* Fees Due Highlight */
+.student-list li.fees-due span {
+  color: red;
+  font-weight: bold;
+}
