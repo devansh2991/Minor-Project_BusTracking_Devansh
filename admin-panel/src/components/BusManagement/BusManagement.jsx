@@ -3,14 +3,13 @@ import "./BusManagement.css";
 
 const BusManagement = () => {
   const [buses, setBuses] = useState([
-    { id: 1, name: "Bus-101", available: true },
-    { id: 2, name: "Bus-205", available: true },
-    { id: 3, name: "Bus-309", available: true },
+    { id: 1, name: "MP07L0667", available: true },
+    { id: 2, name: "MP07K0668", available: true },
+    { id: 3, name: "MP07ZW0628", available: true },
   ]);
 
   const [newBusName, setNewBusName] = useState("");
 
-  // Add new bus
   const addBus = () => {
     if (newBusName.trim() === "") return;
     const newBus = {
@@ -22,16 +21,14 @@ const BusManagement = () => {
     setNewBusName("");
   };
 
-  // Mark bus as unavailable
-  const markUnavailable = (id) => {
+  const toggleAvailability = (id) => {
     setBuses(
       buses.map((bus) =>
-        bus.id === id ? { ...bus, available: false } : bus
+        bus.id === id ? { ...buses, available: !buses.available } : bus
       )
     );
   };
 
-  // Remove bus completely
   const removeBus = (id) => {
     setBuses(buses.filter((bus) => bus.id !== id));
   };
@@ -44,27 +41,20 @@ const BusManagement = () => {
       <div className="add-bus">
         <input
           type="text"
-          placeholder="Enter bus name"
+          placeholder="Enter Bus Number"
           value={newBusName}
           onChange={(e) => setNewBusName(e.target.value)}
         />
         <button onClick={addBus}>Add Bus</button>
       </div>
 
-      {/* Bus List */}
       <ul className="bus-list">
         {buses.map((bus) => (
           <li key={bus.id} className={!bus.available ? "unavailable" : ""}>
             <span>{bus.name}</span>
-            {bus.available ? (
-              <button onClick={() => markUnavailable(bus.id)}>
-                Mark Unavailable
-              </button>
-            ) : (
-              <span style={{ color: "red", marginLeft: "10px" }}>
-                Unavailable
-              </span>
-            )}
+            <button onClick={() => toggleAvailability(bus.id)}>
+              {bus.available ? "Mark Unavailable" : "Mark Available"}
+            </button>
             <button onClick={() => removeBus(bus.id)}>Remove</button>
           </li>
         ))}

@@ -25,7 +25,6 @@ const Reports = () => {
   const [newBusId, setNewBusId] = useState("");
   const [newIssue, setNewIssue] = useState("");
 
-  // Add new report
   const addReport = () => {
     if (!newStudentName || !newBusId || !newIssue) return;
     const newReport = {
@@ -42,7 +41,6 @@ const Reports = () => {
     setNewIssue("");
   };
 
-  // Toggle status
   const toggleStatus = (id) => {
     setReports(
       reports.map((report) =>
@@ -56,7 +54,6 @@ const Reports = () => {
     );
   };
 
-  // Remove report
   const removeReport = (id) => {
     setReports(reports.filter((report) => report.id !== id));
   };
@@ -64,7 +61,6 @@ const Reports = () => {
   return (
     <div className="reports">
       <h2>Student Concerns & Bus Reports</h2>
-      {/* Reports Table */}
       <table>
         <thead>
           <tr>

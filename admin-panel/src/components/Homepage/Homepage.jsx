@@ -5,9 +5,6 @@ import "leaflet/dist/leaflet.css";
 import { io } from "socket.io-client";
 import L from "leaflet";
 
-
-
-// Fix Leaflet marker icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -23,7 +20,6 @@ const socket = io("http://localhost:3000");
 const AdminHomePage = () => {
   const [markers, setMarkers] = useState({});
 
-  // Receive real-time data
   useEffect(() => {
     socket.on("receiveLocation", (data) => {
       setMarkers((prev) => ({
@@ -50,7 +46,6 @@ const AdminHomePage = () => {
     <div className="admin-container">
       <main className="main-content">
         
-        {/* Header */}
         <header className="header">
           <h1>Admin Dashboard</h1>
           <div className="profile">
@@ -58,7 +53,6 @@ const AdminHomePage = () => {
           </div>
         </header>
 
-        {/* Cards */}
         <section className="dashboard-cards">
           <div className="card"><h3>Total Buses</h3><p>25</p></div>
           <div className="card"><h3>Active Routes</h3><p>12</p></div>
@@ -66,7 +60,6 @@ const AdminHomePage = () => {
           <div className="card"><h3>Students</h3><p>450</p></div>
         </section>
 
-        {/* Leaflet Map */}
         <section className="map-section">
           <h2>Live Bus Tracking</h2>
 
@@ -88,7 +81,6 @@ const AdminHomePage = () => {
           </MapContainer>
         </section>
 
-        {/* Reports */}
         <section className="reports">
           <h2>Recent Reports</h2>
           <table>

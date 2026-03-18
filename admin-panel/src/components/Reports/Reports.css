@@ -3,7 +3,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  margin: 20px 120px;
+  margin: 20px 0px 0px 140px;
   font-family: Arial, sans-serif;
 }
 
@@ -13,7 +13,6 @@
   text-align: center;
 }
 
-/* Add Report Form */
 .add-report {
   display: flex;
   gap: 10px;
@@ -41,7 +40,6 @@
   background-color: #219150;
 }
 
-/* Reports Table */
 .reports table {
   width: 100%;
   border-collapse: collapse;

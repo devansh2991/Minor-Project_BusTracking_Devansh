@@ -14,7 +14,6 @@
   color: #2c3e50;
 }
 
-/* Add Student Form */
 .add-student {
   display: flex;
   gap: 10px;
@@ -48,7 +47,6 @@
   background-color: #219150;
 }
 
-/* Student List */
 .student-list {
   list-style: none;
   padding: 0;
@@ -101,7 +99,6 @@
   background-color: #a93226;
 }
 
-/* Fees Due Highlight */
 .student-list li.fees-due span {
   color: red;
   font-weight: bold;

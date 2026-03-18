@@ -3,15 +3,14 @@ import "./DriverManagement.css";
 
 const DriverManagement = () => {
   const [drivers, setDrivers] = useState([
-    { id: 1, name: "John Doe", bus: "Bus-101", available: true },
-    { id: 2, name: "Jane Smith", bus: "Bus-205", available: true },
-    { id: 3, name: "Raj Kumar", bus: "Bus-309", available: false },
+    { id: 1, name: "Arjun Gurjar", bus: "MP07L0667", available: true },
+    { id: 2, name: "Rajkumar", bus: "MP07K0668", available: true },
+    { id: 3, name: "Girraj Yadav", bus: "MP07ZW0628", available: false },
   ]);
 
   const [newDriverName, setNewDriverName] = useState("");
   const [assignedBus, setAssignedBus] = useState("");
 
-  // Add new driver
   const addDriver = () => {
     if (newDriverName.trim() === "" || assignedBus.trim() === "") return;
     const newDriver = {
@@ -25,7 +24,6 @@ const DriverManagement = () => {
     setAssignedBus("");
   };
 
-  // Toggle availability
   const toggleAvailability = (id) => {
     setDrivers(
       drivers.map((driver) =>
@@ -34,7 +32,6 @@ const DriverManagement = () => {
     );
   };
 
-  // Remove driver
   const removeDriver = (id) => {
     setDrivers(drivers.filter((driver) => driver.id !== id));
   };
@@ -43,7 +40,6 @@ const DriverManagement = () => {
     <div className="driver-management">
       <h2>Driver Management</h2>
 
-      {/* Add Driver */}
       <div className="add-driver">
         <input
           type="text"
@@ -60,7 +56,6 @@ const DriverManagement = () => {
         <button onClick={addDriver}>Add Driver</button>
       </div>
 
-      {/* Driver List */}
       <ul className="driver-list">
         {drivers.map((driver) => (
           <li key={driver.id} className={!driver.available ? "unavailable" : ""}>

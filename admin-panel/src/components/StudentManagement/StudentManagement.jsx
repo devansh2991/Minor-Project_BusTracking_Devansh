@@ -12,7 +12,6 @@ const StudentManagement = () => {
   const [newStudentAddress, setNewStudentAddress] = useState("");
   const [feesPaid, setFeesPaid] = useState(false);
 
-  // Add new student
   const addStudent = () => {
     if (newStudentName.trim() === "" || newStudentAddress.trim() === "") return;
     const newStudent = {
@@ -27,7 +26,6 @@ const StudentManagement = () => {
     setFeesPaid(false);
   };
 
-  // Toggle fee status
   const toggleFees = (id) => {
     setStudents(
       students.map((student) =>
@@ -36,7 +34,6 @@ const StudentManagement = () => {
     );
   };
 
-  // Remove student
   const removeStudent = (id) => {
     setStudents(students.filter((student) => student.id !== id));
   };
@@ -45,7 +42,6 @@ const StudentManagement = () => {
     <div className="student-management">
       <h2>Student Management</h2>
 
-      {/* Add Student */}
       <div className="add-student">
         <input
           type="text"
@@ -70,7 +66,6 @@ const StudentManagement = () => {
         <button onClick={addStudent}>Add Student</button>
       </div>
 
-      {/* Student List */}
       <ul className="student-list">
         {students.map((student) => (
           <li key={student.id} className={!student.feesPaid ? "fees-due" : ""}>

@@ -5,13 +5,13 @@ const RouteManagement = () => {
   const [routes, setRoutes] = useState([
     {
       id: 1,
-      name: "Route A",
-      stops: ["Stop 1", "Stop 2", "Stop 3"],
+      name: "Anand Nagar",
+      stops: ["Bahodapur", "Anand Nagar", "Sagartal Chauraha"],
     },
     {
       id: 2,
-      name: "Route B",
-      stops: ["Stop 4", "Stop 5", "Stop 6"],
+      name: "Koteshwar",
+      stops: ["S.P. Ashram", "Urvai Gate", "Koteshwar Chauraha"],
     },
   ]);
 
@@ -19,7 +19,6 @@ const RouteManagement = () => {
   const [newStop, setNewStop] = useState("");
   const [selectedRoute, setSelectedRoute] = useState(null);
 
-  // Add new route
   const addRoute = () => {
     if (newRouteName.trim() === "") return;
     const newRoute = {
@@ -31,7 +30,6 @@ const RouteManagement = () => {
     setNewRouteName("");
   };
 
-  // Add stop to selected route
   const addStop = () => {
     if (!selectedRoute || newStop.trim() === "") return;
     setRoutes(
@@ -44,7 +42,6 @@ const RouteManagement = () => {
     setNewStop("");
   };
 
-  // Remove stop
   const removeStop = (routeId, stopIndex) => {
     setRoutes(
       routes.map((route) =>
@@ -58,7 +55,6 @@ const RouteManagement = () => {
     );
   };
 
-  // Remove route
   const removeRoute = (id) => {
     setRoutes(routes.filter((route) => route.id !== id));
   };
@@ -67,7 +63,6 @@ const RouteManagement = () => {
     <div className="route-management">
       <h2>Route Management</h2>
 
-      {/* Add Route */}
       <div className="add-route">
         <input
           type="text"
@@ -78,7 +73,6 @@ const RouteManagement = () => {
         <button onClick={addRoute}>Add Route</button>
       </div>
 
-      {/* Add Stop */}
       <div className="add-stop">
         <select
           value={selectedRoute || ""}
@@ -100,7 +94,6 @@ const RouteManagement = () => {
         <button onClick={addStop}>Add Stop</button>
       </div>
 
-      {/* Route List */}
       <ul className="route-list">
         {routes.map((route) => (
           <li key={route.id}>

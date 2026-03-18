@@ -20,9 +20,9 @@ if(navigator.geolocation){
     );
 }
 
-const map = L.map('map').setView([0, 0], 12);
+const map = L.map('map').setView([26.2183, 78.1828], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; Minor Project'
 }).addTo(map);
 
 const markers = {};

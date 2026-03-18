@@ -12,10 +12,7 @@ function App() {
   return (
     <Router>
       <div className="admin-container">
-        {/* Sidebar stays outside Routes so it’s always visible */}
         <Sidebar />
-
-        {/* Main content changes based on route */}
         <main className="main-content">
           <Routes>
             <Route path="/" element={<AdminHomePage />} />
@@ -24,7 +21,6 @@ function App() {
             <Route path="/drivers" element={<DriverManagement />} />
             <Route path="/students" element={<StudentManagement />} />
             <Route path="/reports" element={<Reports />} />
-            {/* <Route path="/settings" element={<SettingsPage />} /> */}
           </Routes>
         </main>
       </div>
