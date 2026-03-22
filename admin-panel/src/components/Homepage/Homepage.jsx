@@ -19,6 +19,57 @@ const socket = io("http://localhost:3000");
 
 const AdminHomePage = () => {
   const [markers, setMarkers] = useState({});
+  const [buses, setBuses] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchBuses = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/getbuses");
+        const data = await res.json();
+        if (res.ok) {
+          setBuses(data.data || data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBuses();
+  }, []);
+
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/getdrivers");
+        const data = await res.json();
+        if (res.ok) {
+          setDrivers(data.data || data);
+        }
+      } catch (err) {
+        console.error(err);
+      } 
+    };
+
+    fetchDrivers();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/getusers");
+        const data = await res.json();
+        if (res.ok) {
+          setUsers(data.data || data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     socket.on("receiveLocation", (data) => {
@@ -49,15 +100,18 @@ const AdminHomePage = () => {
         <header className="header">
           <h1>Admin Dashboard</h1>
           <div className="profile">
-            <span>Welcome, Admin</span>
+            <select name="Profile" id="profile-select">
+              <option value="">Setting</option>
+              <option value="">Logout</option>
+            </select>
           </div>
         </header>
 
         <section className="dashboard-cards">
-          <div className="card"><h3>Total Buses</h3><p>25</p></div>
+          <div className="card"><h3>Total Buses</h3><p>{buses.length}</p></div>
           <div className="card"><h3>Active Routes</h3><p>12</p></div>
-          <div className="card"><h3>Drivers</h3><p>18</p></div>
-          <div className="card"><h3>Students</h3><p>450</p></div>
+          <div className="card"><h3>Drivers</h3><p>{drivers.length}</p></div>
+          <div className="card"><h3>Students</h3><p>{users.length}</p></div>
         </section>
 
         <section className="map-section">
@@ -79,34 +133,6 @@ const AdminHomePage = () => {
               </Marker>
             ))}
           </MapContainer>
-        </section>
-
-        <section className="reports">
-          <h2>Recent Reports</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Bus ID</th>
-                <th>Route</th>
-                <th>Status</th>
-                <th>Last Updated</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>BUS-101</td>
-                <td>Route A</td>
-                <td>On Time</td>
-                <td>10:45 AM</td>
-              </tr>
-              <tr>
-                <td>BUS-205</td>
-                <td>Route B</td>
-                <td>Delayed</td>
-                <td>10:50 AM</td>
-              </tr>
-            </tbody>
-          </table>
         </section>
 
       </main>

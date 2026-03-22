@@ -1,39 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./DriverManagement.css";
 
 const DriverManagement = () => {
-  const [drivers, setDrivers] = useState([
-    { id: 1, name: "Arjun Gurjar", bus: "MP07L0667", available: true },
-    { id: 2, name: "Rajkumar", bus: "MP07K0668", available: true },
-    { id: 3, name: "Girraj Yadav", bus: "MP07ZW0628", available: false },
-  ]);
-
+  const [drivers, setDrivers] = useState([]);
   const [newDriverName, setNewDriverName] = useState("");
-  const [assignedBus, setAssignedBus] = useState("");
+  const [driverNumber, setDriverNumber] = useState("");
 
-  const addDriver = () => {
-    if (newDriverName.trim() === "" || assignedBus.trim() === "") return;
-    const newDriver = {
-      id: Date.now(),
-      name: newDriverName,
-      bus: assignedBus,
-      available: true,
-    };
-    setDrivers([...drivers, newDriver]);
-    setNewDriverName("");
-    setAssignedBus("");
+  const fetchDrivers = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/getdrivers");
+      const data = await res.json();
+      if (res.ok) {
+        setDrivers(data.data || data);
+      }
+    } catch (err) {
+      console.error(err);
+    } 
   };
+
+  useEffect(() => {
+    fetchDrivers();
+  }, []);
+
+  const addDriver = async () => {
+    if (!newDriverName) return alert("Enter driver name");
+    if (!driverNumber) return alert("Enter driver number");
+
+    try {
+      const res = await fetch("http://localhost:3000/adddriver", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: newDriverName, mobile: driverNumber }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setDrivers((prev) => [...prev, data.data]);
+        setNewDriverName("");
+        setDriverNumber("");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+    const removeDriver = async (_id) => {
+    try {
+      await fetch(`http://localhost:3000/deletedriver/${_id}`, {
+        method: "GET",
+      });
+      setDrivers((prev) => prev.filter((driver) => driver._id !== _id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   const toggleAvailability = (id) => {
     setDrivers(
       drivers.map((driver) =>
-        driver.id === id ? { ...driver, available: !driver.available } : driver
+        driver._id === id ? { ...driver, available: !driver.available } : driver
       )
     );
-  };
-
-  const removeDriver = (id) => {
-    setDrivers(drivers.filter((driver) => driver.id !== id));
   };
 
   return (
@@ -47,30 +77,29 @@ const DriverManagement = () => {
           value={newDriverName}
           onChange={(e) => setNewDriverName(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Assign bus"
-          value={assignedBus}
-          onChange={(e) => setAssignedBus(e.target.value)}
+        <input 
+          type="text" 
+          placeholder="Enter driver number"
+          value={driverNumber}
+          onChange={(e) => setDriverNumber(e.target.value)}
         />
         <button onClick={addDriver}>Add Driver</button>
       </div>
 
       <ul className="driver-list">
-        {drivers.map((driver) => (
-          <li key={driver.id} className={!driver.available ? "unavailable" : ""}>
-            <span>
-              {driver.name} — {driver.bus}
-            </span>
-            <button onClick={() => toggleAvailability(driver.id)}>
-              {driver.available ? "Mark Unavailable" : "Mark Available"}
+        {[...drivers]
+        .sort((a,b) => a.name.localeCompare(b.name))
+        .map((driver) => (
+          <li key={driver._id}>
+            <span>{driver.name} - {driver.mobile}</span>
+            <button onClick={() => toggleAvailability(driver._id)}>
+              {driver.available ? "Mark Available" : "Mark Unavailable"}
             </button>
-            <button onClick={() => removeDriver(driver.id)}>Remove</button>
+            <button onClick={() => removeDriver(driver._id)}>Remove</button>
           </li>
         ))}
       </ul>
     </div>
   );
 };
-
 export default DriverManagement;

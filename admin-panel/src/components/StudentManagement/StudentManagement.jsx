@@ -1,41 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./StudentManagement.css";
 
 const StudentManagement = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: "Aarav Sharma", address: "Morena", feesPaid: true },
-    { id: 2, name: "Priya Verma", address: "Anand Nagar", feesPaid: false },
-    { id: 3, name: "Rohan Patel", address: "Phoolbagh", feesPaid: true },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [newUserId, setNewUserId] = useState("");
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserAddress, setNewUserAddress] = useState("");
 
-  const [newStudentName, setNewStudentName] = useState("");
-  const [newStudentAddress, setNewStudentAddress] = useState("");
-  const [feesPaid, setFeesPaid] = useState(false);
-
-  const addStudent = () => {
-    if (newStudentName.trim() === "" || newStudentAddress.trim() === "") return;
-    const newStudent = {
-      id: Date.now(),
-      name: newStudentName,
-      address: newStudentAddress,
-      feesPaid,
-    };
-    setStudents([...students, newStudent]);
-    setNewStudentName("");
-    setNewStudentAddress("");
-    setFeesPaid(false);
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/getusers");
+      const data = await res.json();
+      if (res.ok) {
+        setUsers(data.data || data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const toggleFees = (id) => {
-    setStudents(
-      students.map((student) =>
-        student.id === id ? { ...student, feesPaid: !student.feesPaid } : student
-      )
-    );
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const addUser = async () => {
+    if (!newUserId) return alert("Enter Roll No");
+    if (!newUserName) return alert("Enter user name");
+    if (!newUserAddress) return alert("Enter user address");
+    try {
+      const res = await fetch("http://localhost:3000/adduser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rollNo: newUserId,
+          name: newUserName,
+          address: newUserAddress,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setUsers((prev) => [...prev, data.data]);
+        setNewUserId("");
+        setNewUserName("");
+        setNewUserAddress("");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const removeStudent = (id) => {
-    setStudents(students.filter((student) => student.id !== id));
+  const deleteUser = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/deleteuser/${id}`, {
+        method: "GET",
+      });
+      setUsers((prev) => prev.filter((user) => user._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -43,42 +68,37 @@ const StudentManagement = () => {
       <h2>Student Management</h2>
 
       <div className="add-student">
-        <input
-          type="text"
-          placeholder="Enter student name"
-          value={newStudentName}
-          onChange={(e) => setNewStudentName(e.target.value)}
+        <input 
+          type="text" 
+          placeholder="Enter Roll No"
+          value={newUserId}
+          onChange={(e) => setNewUserId(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Enter student address"
-          value={newStudentAddress}
-          onChange={(e) => setNewStudentAddress(e.target.value)}
+          placeholder="Enter Student Name"
+          value={newUserName}
+          onChange={(e) => setNewUserName(e.target.value)}
         />
-        <label>
-          <input
-            type="checkbox"
-            checked={feesPaid}
-            onChange={(e) => setFeesPaid(e.target.checked)}
-          />
-          Fees Paid
-        </label>
-        <button onClick={addStudent}>Add Student</button>
+        <input
+          type="text"
+          placeholder="Enter Student Address"
+          value={newUserAddress}
+          onChange={(e) => setNewUserAddress(e.target.value)}
+        />
+        <button onClick={addUser}>Add User</button>
       </div>
 
       <ul className="student-list">
-        {students.map((student) => (
-          <li key={student.id} className={!student.feesPaid ? "fees-due" : ""}>
-            <div className="student-info">
-              <span>{student.name}</span>
-              <span className="address">({student.address})</span>
-            </div>
-            <div className="student-actions">
-              <button onClick={() => toggleFees(student.id)}>
-                {student.feesPaid ? "Mark Fees Due" : "Mark Fees Paid"}
-              </button>
-              <button onClick={() => removeStudent(student.id)}>Remove</button>
-            </div>
+        {[...users]
+          .sort((a, b) => a.rollNo.localeCompare(b.rollNo))
+          .map((user) => (
+          <li key={user._id}>
+              <span>{user.rollNo} - {user.name}</span>
+              <span className="address">({user.address})</span>
+              <div className="student-actions">
+                <button onClick={() => deleteUser(user._id)}>Delete</button>
+              </div>
           </li>
         ))}
       </ul>

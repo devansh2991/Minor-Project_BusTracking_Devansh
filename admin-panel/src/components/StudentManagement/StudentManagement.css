@@ -98,8 +98,3 @@
 .student-actions button:last-of-type:hover {
   background-color: #a93226;
 }
-
-.student-list li.fees-due span {
-  color: red;
-  font-weight: bold;
-}
