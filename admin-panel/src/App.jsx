@@ -7,6 +7,7 @@ import RouteManagement from "./components/RouteManagement/RouteManagement";
 import DriverManagement from "./components/DriverManagement/DriverManagement";
 import StudentManagement from "./components/StudentManagement/StudentManagement";
 import Reports from "./components/Reports/Reports";
+import Map from "./components/Map/Map";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<AdminHomePage />} />
             <Route path="/bus-management" element={<BusManagement />} />
+            <Route path="/map" element={<Map />} />
             <Route path="/routes" element={<RouteManagement />} />
             <Route path="/drivers" element={<DriverManagement />} />
             <Route path="/students" element={<StudentManagement />} />

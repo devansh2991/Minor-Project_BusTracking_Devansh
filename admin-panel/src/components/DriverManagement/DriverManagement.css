@@ -40,6 +40,16 @@
   background-color: #219150;
 }
 
+.driver-list-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
 .driver-list {
   list-style: none;
   padding: 0;
@@ -54,6 +64,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.driver-list :hover {
+  background-color: #f0f0f0;
+  transform: scale(1.005);
+  transition: ease-in 0.1s;
+  cursor: pointer;
 }
 
 .driver-list li.unavailable span {

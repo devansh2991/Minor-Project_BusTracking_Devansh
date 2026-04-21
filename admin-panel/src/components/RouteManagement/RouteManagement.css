@@ -3,8 +3,8 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  max-width: 80%;
-  margin: 20px 0px 0px 160px;
+  max-width: 50%;
+  margin: 20px 0px 0px 320px;
   font-family: Arial, sans-serif;
 }
 
@@ -14,20 +14,20 @@
   color: #2c3e50;
 }
 
-.add-route, .add-stop {
+.add-route {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.add-route input, .add-stop input, .add-stop select {
+.add-route input {
   flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.add-route button, .add-stop button {
+.add-route button {
   padding: 8px 12px;
   background-color: #27ae60;
   color: #fff;
@@ -38,6 +38,30 @@
 
 .add-route button:hover, .add-stop button:hover {
   background-color: #219150;
+}
+
+.add-stop {
+  margin-left: 20px;
+  width: 300px;
+  gap: 10px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.add-stop input {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.add-stop button{
+  padding: 8px 12px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* Route List */

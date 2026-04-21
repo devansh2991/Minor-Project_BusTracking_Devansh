@@ -66,6 +66,21 @@ const StudentManagement = () => {
   return (
     <div className="student-management">
       <h2>Student Management</h2>
+      <div className="add-student">
+        <input
+          type="text"
+          placeholder="Search student"
+          onChange={(e) => {
+            const query = e.target.value.toLowerCase();
+            fetchUsers().then(() => {
+              setUsers((prev) =>
+                prev.filter((user) => user.rollNo.toLowerCase().includes(query))
+              );
+            });
+          }}
+          style={{ outline: "none" }}
+        />
+      </div>
 
       <div className="add-student">
         <input 

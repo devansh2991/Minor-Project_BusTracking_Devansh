@@ -1,62 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RouteManagement.css";
 
 const RouteManagement = () => {
-  const [routes, setRoutes] = useState([
-    {
-      id: 1,
-      name: "Anand Nagar",
-      stops: ["Bahodapur", "Anand Nagar", "Sagartal Chauraha"],
-    },
-    {
-      id: 2,
-      name: "Koteshwar",
-      stops: ["S.P. Ashram", "Urvai Gate", "Koteshwar Chauraha"],
-    },
-  ]);
-
+  const [routes, setRoutes] = useState([]);
   const [newRouteName, setNewRouteName] = useState("");
-  const [newStop, setNewStop] = useState("");
-  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [newStops, setNewStops] = useState("");
 
-  const addRoute = () => {
-    if (newRouteName.trim() === "") return;
-    const newRoute = {
-      id: Date.now(),
-      name: newRouteName,
-      stops: [],
-    };
-    setRoutes([...routes, newRoute]);
+  const fetchRoutes = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/getroutes");
+      const data = await res.json();
+      if (res.ok) {
+        setRoutes(
+          (data.data ?? data).map((r) => ({
+            ...r,
+            stops: r.stops ?? [],
+          }))
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoutes();
+  }, []);
+
+  const addRoute = async () => {
+    if (!newRouteName) return alert("Enter route name");
+    const res = await fetch("http://localhost:3000/addroute", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ routeName: newRouteName }),
+    });
+    const routeData = await res.json();
+    setRoutes((prev) => [
+      ...prev,
+      { ...routeData, stops: routeData.stops ?? [] },
+    ]);
     setNewRouteName("");
   };
 
-  const addStop = () => {
-    if (!selectedRoute || newStop.trim() === "") return;
-    setRoutes(
-      routes.map((route) =>
-        route.id === selectedRoute
-          ? { ...route, stops: [...route.stops, newStop] }
-          : route
-      )
-    );
-    setNewStop("");
+  const addStop = async (routeId, stopName) => {
+    if (!routeId) return alert("Enter stop name");
+
+    try {
+      const res = await fetch(`http://localhost:3000/addstop/${routeId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: stopName }),
+      });
+
+      const stopData = await res.json();
+
+      setRoutes((prev) =>
+        prev.map((route) =>
+          route._id === routeId
+            ? {
+              ...route,
+              stops: [...route.stops, stopData.data],
+            }
+            : route
+        )
+      );
+
+      setNewStops((prev) => ({ ...prev, [routeId]: "" }));
+      
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  const removeStop = (routeId, stopIndex) => {
-    setRoutes(
-      routes.map((route) =>
-        route.id === routeId
+const removeStop = async (routeId, index) => {
+  try {
+    await fetch(
+      `http://localhost:8000/deletestop/${routeId}/${index}`,
+      { method: "DELETE" }
+    );
+
+    setRoutes((prev) =>
+      prev.map((route) =>
+        route._id === routeId
           ? {
               ...route,
-              stops: route.stops.filter((_, index) => index !== stopIndex),
+              stops: route.stops.filter((_, i) => i !== index),
             }
           : route
       )
     );
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-  const removeRoute = (id) => {
-    setRoutes(routes.filter((route) => route.id !== id));
+  const removeRoute = async (id) => {
+    await fetch(`http://localhost:3000/deleteroute/${id}`, {
+      method: "GET",
+    });
+    setRoutes((prev) => prev.filter((route) => route._id !== id));
   };
 
   return (
@@ -73,44 +119,46 @@ const RouteManagement = () => {
         <button onClick={addRoute}>Add Route</button>
       </div>
 
-      <div className="add-stop">
-        <select
-          value={selectedRoute || ""}
-          onChange={(e) => setSelectedRoute(Number(e.target.value))}
-        >
-          <option value="">Select Route</option>
-          {routes.map((route) => (
-            <option key={route.id} value={route.id}>
-              {route.name}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="Enter stop name"
-          value={newStop}
-          onChange={(e) => setNewStop(e.target.value)}
-        />
-        <button onClick={addStop}>Add Stop</button>
-      </div>
-
       <ul className="route-list">
         {routes.map((route) => (
-          <li key={route.id}>
+          <li key={route._id}>
             <div className="route-header">
-              <span>{route.name}</span>
-              <button onClick={() => removeRoute(route.id)}>Remove Route</button>
+              <span>{route.routeName}</span>
+              <div className="left-sec">
+              
+              <button onClick={() => removeRoute(route._id)}>
+                Remove Route
+              </button>
+
+              </div>
             </div>
+
             <ul className="stop-list">
               {route.stops.map((stop, index) => (
                 <li key={index}>
                   {stop}
-                  <button onClick={() => removeStop(route.id, index)}>
-                    Remove Stop
+                  <button onClick={() => removeStop(route._id, index)}>
+                    Remove
                   </button>
                 </li>
               ))}
             </ul>
+            <div className="add-stop">
+              <input
+                type="text"
+                placeholder="Enter stop name"
+                value={newStops[route._id] || ""}
+                onChange={(e) =>
+                  setNewStops((prev) => ({
+                    ...prev,
+                    [route._id]: e.target.value,
+                  }))
+                }
+              />
+              <button onClick={() => addStop(route._id, newStops[route._id])}>
+                Add Stop
+              </button>
+            </div>
           </li>
         ))}
       </ul>

@@ -4,6 +4,7 @@ import "./BusManagement.css";
 const BusManagement = () => {
   const [buses, setBuses] = useState([]);
   const [newBusName, setNewBusName] = useState("");
+  const [available, setAvailable] = useState(false);
 
   const fetchBuses = async () => {
     try {
@@ -57,25 +58,50 @@ const BusManagement = () => {
   };
 
   const toggleAvailability = (id) => {
-    setBuses(
-      buses.map((bus) =>
-        bus._id === id ? { ...bus, available: !bus.available } : bus
-      )
-    );
+    setAvailable((prev) => !prev);
+    fetch(`http://localhost:3000/updatebus/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ available: !available }),
+    });
+    setBuses((prev) => prev.map((bus) => bus._id === id ? { ...bus, available: !available } : bus)); 
   };
 
   return (
     <div className="bus-management">
       <h2>Bus Management</h2>
-
+       <div className="add-bus">
+        <input
+          type="text"
+          placeholder="Search by bus number"
+          onChange={(e) => {
+            const query = e.target.value.toLowerCase();
+            fetchBuses().then(() => {
+              setBuses((prev) =>
+                prev.filter((bus) => bus.busnumber.toLowerCase().includes(query))
+              );
+            });
+          }}
+          style={{ outline: "none" }}
+        />
+      </div>
       <div className="add-bus">
         <input
           type="text"
           placeholder="Enter Bus Name"
           value={newBusName}
           onChange={(e) => setNewBusName(e.target.value)}
+          style={{ outline: "none" }}
         />
         <button onClick={addBus}>Add Bus</button>
+      </div>
+
+      <div className="bus-list-header">
+        <span style={{ fontWeight: "bold", marginRight: "20px" }}>Bus Number</span>
+        <span style={{ fontWeight: "bold", marginRight: "20px" }}>Availability</span>
+        <span style={{ fontWeight: "bold" }}>Actions</span>
       </div>
 
       <ul className="bus-list">
@@ -84,8 +110,8 @@ const BusManagement = () => {
             <span>{bus.busnumber}</span>
 
             <button onClick={() => toggleAvailability(bus._id)}
-              style = {{ backgroundColor: bus.available ? "green" : "red" }}>
-              {bus.available ? "Mark Available" : "Mark Unavailable"}
+              style = {{ backgroundColor: bus.available ? "#e46e00" : "green" }}>
+              {bus.available ? "Mark Unavailable" : "Mark Available"}
             </button>
 
             <button onClick={() => deleteBus(bus._id)} refresh="true">

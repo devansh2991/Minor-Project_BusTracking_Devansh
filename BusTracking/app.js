@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { ReturnDocument } = require('mongodb');
 
 app.use(cors());
 app.use(express.json());
@@ -21,9 +22,8 @@ const io = require("socket.io")(server, {
 const busSchema = new mongoose.Schema({
   id: { type: String, primaryKey: true },
   busnumber: String,
+  available: { type: Boolean, default: false },
 });
-
-const Bus = mongoose.model('Bus', busSchema);
 
 const userSchema = new mongoose.Schema({
   rollNo: { type: String, primaryKey: true },
@@ -32,9 +32,22 @@ const userSchema = new mongoose.Schema({
 });
 
 const driverSchema = new mongoose.Schema({
+  id: { type: String, primaryKey: true },
   mobile: String,
-  name: String
+  name: String,
+  available: { type: Boolean, default: false },
 })
+
+const routeSchema = new mongoose.Schema({
+  id: {type: String, primaryKey: true},
+  routeName: {type: String, required: true},
+  stops: [{ type: String }],
+})
+
+ 
+const Route = mongoose.model('Route', routeSchema);
+
+const Bus = mongoose.model('Bus', busSchema);
 
 const Driver = mongoose.model('Driver', driverSchema);
 
@@ -191,6 +204,17 @@ app.get("/getbuses", async (req, res) => {
   }
 });
 
+app.post("/updatebus/:id", async (req, res) => {
+  const { available } = req.body;
+    const bus = await Bus.findByIdAndUpdate(req.params.id, { available }, { new: true, returnDocument: ReturnDocument.AFTER });
+    res.json({
+      message: "Bus updated successfully",
+      data: bus,
+    });
+    console.log("Bus availability updated:", bus);
+});
+
+
 app.get("/deletebus/:id", async (req, res) => {
   const bus = await Bus.findOneAndDelete({ _id: req.params.id });
   res.json({
@@ -199,15 +223,104 @@ app.get("/deletebus/:id", async (req, res) => {
   });
 });
 
+// Route APIs
+app.post("/addroute", async (req, res) => {
+  const route = new Route(req.body); 
+  route.save()
+    .then(() => {
+      res.json({
+        message: "Route added Succesfully",
+        data: req.body,
+      });
+    })
+    .catch((err) => {
+      console.error("Error adding Route", err)
+      res.status(500).json({
+        message: "Error adding Route",
+        err: err,
+      });
+    });
+}); 
+
+app.get("/getroutes", async (req, res) => {
+  const routes = await Route.find();
+  res.json({
+    message: "Routes retrieved successfully",
+    data: routes,
+  });
+});
+
+app.get("/deleteroute/:id", async (req, res) => {
+  const route = await Route.findOneAndDelete({ _id: req.params.id });
+  res.json({
+    message: "Route deleted successfully",
+    data: route,
+  });
+});
+
+// Stop APIs
+
+app.post("/addstop/:id", async (req, res) => {
+  try {
+    const route = await Route.findById(req.params.id);
+
+    if (!route) {
+      return res.status(404).json({ message: "Route not found" });
+    }
+
+    route.stops.push(req.body.name);
+
+    await route.save();
+
+    res.json({
+      message: "Stop added",
+      data: route,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/deletestop/:id/:index", async (req, res) => {
+  try {
+    const { id, index } = req.params;
+
+    const route = await Route.findById(id);
+    if (!route) {
+      return res.status(404).json({ message: "Route not found" });
+    }
+
+    route.stops.splice(index, 1);
+
+    await route.save();
+
+    res.json({
+      message: "Stop removed",
+      data: route,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Driver APIs
 
 app.post("/adddriver", (req, res) => {
   const driver = new Driver(req.body);
   driver.save()
-  res.json({
-    message: "Driver added successfully",
-    data: req.body,
-  })
+    .then(() => {
+      res.json({
+        message: "Driver added successfully",
+        data: req.body,
+      });
+    })
+    .catch((err) => {
+      console.error("Error adding driver:", err);
+      res.status(500).json({
+        message: "Error adding driver",
+        error: err,
+      });
+    });
 });
 
 app.get("/driver", async (req, res) => {
@@ -230,6 +343,16 @@ app.get("/driver", async (req, res) => {
     }
   }
 });
+
+app.post("/updatedriver/:id", async (req, res) => {
+  const { available } = req.body;
+    const driver = await Driver.findByIdAndUpdate(req.params.id, { available }, { new: true, returnDocument: ReturnDocument.AFTER });
+    res.json({
+      message: "Driver updated successfully",
+      data: driver,
+    });
+});
+
 
 app.get("/getdrivers", async (req, res) => {
   const drivers = await Driver.find();
